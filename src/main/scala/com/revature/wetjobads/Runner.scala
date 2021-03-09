@@ -13,16 +13,16 @@ object Runner {
         val spark = SparkSession
         .builder()
         .appName("WET Job Ads")
-        .master("local[4]")
+        // .master("local[4]")
         .getOrCreate()
 
         // Reference: https://sparkbyexamples.com/spark/spark-read-text-file-from-s3/#s3-dependency
-        val key = System.getenv(("AWS_ACCESS_KEY_ID"))
-        val secret = System.getenv(("AWS_SECRET_ACCESS_KEY"))
+        // val key = System.getenv(("AWS_ACCESS_KEY_ID"))
+        // val secret = System.getenv(("AWS_SECRET_ACCESS_KEY"))
 
-        spark.sparkContext.hadoopConfiguration.set("fs.s3a.access.key", key)
-        spark.sparkContext.hadoopConfiguration.set("fs.s3a.secret.key", secret)
-        spark.sparkContext.hadoopConfiguration.set("fs.s3a.endpoint", "s3.amazonaws.com")
+        // spark.sparkContext.hadoopConfiguration.set("fs.s3a.access.key", key)
+        // spark.sparkContext.hadoopConfiguration.set("fs.s3a.secret.key", secret)
+        // spark.sparkContext.hadoopConfiguration.set("fs.s3a.endpoint", "s3.amazonaws.com")
 
         val sc = spark.sparkContext
 
@@ -85,7 +85,14 @@ object Runner {
         val mappedLines = jobAdsDf.toDF("State Code", "Tech Job Total")
         val combinedCrawl = mappedLines.join(combinedCensusData,("State Code"))
         .withColumn("Tech Ads Proportional to Population", round(($"Tech Job Total" / $"Population Estimate Total" * 100) , 8))
-        .select($"State Code", $"Geographic Area Name", $"Tech Job Total", $"Population Estimate Total", $"Tech Ads Proportional to Population").show(51, false)
+        .select($"State Code", $"Geographic Area Name", $"Tech Job Total", $"Population Estimate Total", $"Tech Ads Proportional to Population")
+
+        val s3OutputBucket = "s3a://commoncrawlques1outputbucket/commoncrawl-demo-data"
+        combinedCrawl.write
+            .format("csv")
+            .option("compression", "gzip")
+            .mode("overwrite")
+            .save(s3OutputBucket)
     
     }
 
