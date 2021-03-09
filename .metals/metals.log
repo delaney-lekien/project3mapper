@@ -4317,3 +4317,93 @@ something's wrong: no file:///home/delaneylekien/wetreader/wetjobads/src/main/sc
 [0m2021.03.09 15:27:31 INFO  time: compiled root in 0.28s[0m
 Mar 09, 2021 3:29:39 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTraceNotification
+[0m2021.03.09 15:49:50 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:49:51 INFO  time: compiled root in 1.41s[0m
+[0m2021.03.09 15:50:35 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:50:35 INFO  time: compiled root in 0.29s[0m
+[0m2021.03.09 15:51:34 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:51:34 INFO  time: compiled root in 0.27s[0m
+[0m2021.03.09 15:51:55 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:51:55 INFO  time: compiled root in 0.15s[0m
+[0m2021.03.09 15:51:56 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:51:56 INFO  time: compiled root in 0.3s[0m
+[0m2021.03.09 15:52:08 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:52:08 INFO  time: compiled root in 0.3s[0m
+[0m2021.03.09 15:52:11 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:52:11 INFO  time: compiled root in 0.3s[0m
+[0m2021.03.09 15:52:31 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:52:31 INFO  time: compiled root in 0.28s[0m
+[0m2021.03.09 15:53:13 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:53:15 INFO  time: compiled root in 1.34s[0m
+[0m2021.03.09 15:53:32 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:53:34 INFO  time: compiled root in 1.41s[0m
+[0m2021.03.09 15:54:04 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:54:06 INFO  time: compiled root in 1.74s[0m
+[0m2021.03.09 15:54:10 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:54:12 INFO  time: compiled root in 1.73s[0m
+[0m2021.03.09 15:57:18 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 15:57:20 INFO  time: compiled root in 1.51s[0m
+Mar 09, 2021 4:01:09 PM scala.meta.internal.pc.CompilerAccess scala$meta$internal$pc$CompilerAccess$$retryWithCleanCompiler
+INFO: compiler crashed due to an error in the Scala compiler, retrying with new compiler instance.
+Mar 09, 2021 4:01:09 PM scala.meta.internal.pc.CompilerAccess scala$meta$internal$pc$CompilerAccess$$handleError
+SEVERE: null
+java.lang.NullPointerException
+	at scala.reflect.internal.Definitions$DefinitionsClass.isByNameParamType(Definitions.scala:379)
+	at scala.reflect.internal.TreeInfo.isStableIdent(TreeInfo.scala:130)
+	at scala.reflect.internal.TreeInfo.isStableIdentifier(TreeInfo.scala:105)
+	at scala.reflect.internal.TreeInfo.isPath(TreeInfo.scala:95)
+	at scala.reflect.internal.TreeInfo.admitsTypeSelection(TreeInfo.scala:147)
+	at scala.tools.nsc.interactive.Global.stabilizedType(Global.scala:963)
+	at scala.tools.nsc.interactive.Global.typedTreeAt(Global.scala:812)
+	at scala.meta.internal.pc.PcDefinitionProvider.definitionTypedTreeAt(PcDefinitionProvider.scala:96)
+	at scala.meta.internal.pc.PcDefinitionProvider.definition(PcDefinitionProvider.scala:24)
+
+Mar 09, 2021 4:01:09 PM scala.meta.internal.pc.CompilerAccess scala$meta$internal$pc$CompilerAccess$$retryWithCleanCompiler
+INFO: compiler crashed due to an error in the Scala compiler, retrying with new compiler instance.
+Mar 09, 2021 4:01:09 PM scala.meta.internal.pc.CompilerAccess scala$meta$internal$pc$CompilerAccess$$handleError
+SEVERE: null
+java.lang.NullPointerException
+	at scala.reflect.internal.Definitions$DefinitionsClass.isByNameParamType(Definitions.scala:379)
+	at scala.reflect.internal.TreeInfo.isStableIdent(TreeInfo.scala:130)
+	at scala.reflect.internal.TreeInfo.isStableIdentifier(TreeInfo.scala:105)
+	at scala.reflect.internal.TreeInfo.isPath(TreeInfo.scala:95)
+	at scala.reflect.internal.TreeInfo.admitsTypeSelection(TreeInfo.scala:147)
+	at scala.tools.nsc.interactive.Global.stabilizedType(Global.scala:963)
+	at scala.tools.nsc.interactive.Global.typedTreeAt(Global.scala:812)
+	at scala.meta.internal.pc.HoverProvider.typedHoverTreeAt(HoverProvider.scala:239)
+	at scala.meta.internal.pc.HoverProvider.hover(HoverProvider.scala:26)
+
+[0m2021.03.09 16:01:36 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:01:38 INFO  time: compiled root in 1.73s[0m
+[0m2021.03.09 16:01:41 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:01:43 INFO  time: compiled root in 1.89s[0m
+[0m2021.03.09 16:01:55 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:01:57 INFO  time: compiled root in 1.59s[0m
+[0m2021.03.09 16:03:40 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:03:42 INFO  time: compiled root in 1.6s[0m
+[0m2021.03.09 16:03:57 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:03:59 INFO  time: compiled root in 1.69s[0m
+[0m2021.03.09 16:05:05 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:05:07 INFO  time: compiled root in 1.53s[0m
+[0m2021.03.09 16:07:15 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:15 INFO  time: compiled root in 0.43s[0m
+[0m2021.03.09 16:07:20 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:21 INFO  time: compiled root in 1.63s[0m
+[0m2021.03.09 16:07:21 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:23 INFO  time: compiled root in 1.58s[0m
+[0m2021.03.09 16:07:43 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:44 INFO  time: compiled root in 1.61s[0m
+[0m2021.03.09 16:07:44 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:47 INFO  time: compiled root in 1.68s[0m
+[0m2021.03.09 16:07:48 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:07:50 INFO  time: compiled root in 1.61s[0m
+[0m2021.03.09 16:08:25 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:08:27 INFO  time: compiled root in 1.76s[0m
+[0m2021.03.09 16:09:47 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:09:48 INFO  time: compiled root in 1.73s[0m
+[0m2021.03.09 16:10:35 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:10:35 INFO  time: compiled root in 0.36s[0m
+[0m2021.03.09 16:10:51 INFO  compiling root (1 scala source)[0m
+[0m2021.03.09 16:10:53 INFO  time: compiled root in 1.69s[0m
+Mar 09, 2021 4:14:37 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 6039

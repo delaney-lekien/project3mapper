@@ -6,6 +6,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
+import org.apache.spark.sql.functions.round 
 
 object Runner {
     def main(args: Array[String]): Unit = {
@@ -53,9 +54,38 @@ object Runner {
         conf
         )
 
+        val censusData = spark.read
+            .format("csv")
+            .option("header", "true")
+            .load("s3a://censusdatabucketrevature/censusdatacsv/ACSDT1Y2019.B01003_data_with_overlays_2021-02-23T105100.csv")
+
+        // Created a State Code list for easier joining with additional warc data. 
+        val rawStateList = Seq(
+        ("AL", "Alabama"), ("AK", "Alaska"), ("AZ", "Arizona"), ("AR", "Arkansas"), ("CA", "California"), ("CO", "Colorado"), ("CT", "Connecticut"), ("DE", "Delaware"), 
+        ("DC", "District of Columbia"), ("FL", "Florida"), ("GA", "Georgia"), ("HI", "Hawaii"), ("ID", "Idaho"), ("IL", "Illinois"), ("IN", "Indiana"), ("IA", "Iowa"), 
+        ("KS", "Kansas"), ("KY", "Kentucky"), ("LA", "Louisiana"), ("ME", "Maine"), ("MD", "Maryland"), ("MA", "Massachusetts"), ("MI", "Michigan"), ("MN", "Minnesota"), 
+        ("MS", "Mississippi"), ("MO", "Missouri"), ("MT", "Montana"), ("NE", "Nebraska"), ("NV", "Nevada"), ("NH", "New Hampshire"), ("NJ", "New Jersey"), ("NM", "New Mexico"), 
+        ("NY", "New York"), ("NC", "North Carolina"), ("ND", "North Dakota"), ("OH", "Ohio"), ("OK", "Oklahoma"), ("OR", "Oregon"), ("PA", "Pennsylvania"), ("RI", "Rhode Island"), 
+        ("SC", "South Carolina"), ("SD", "South Dakota"), ("TN", "Tennessee"), ("TX", "Texas"), ("UT", "Utah"), ("VT", "Vermont"), ("VA", "Virginia"), ("WA", "Washington"), 
+        ("WV", "West Virginia"), ("WI", "Wisconsin"), ("WY", "Wyoming"))
+
+        val stateList = rawStateList.toDF("State Code", "State Name")
+
+        // Combined the two dataFrames to get state codes assocaited with area name.
+
+        val combinedCensusData = censusData.join(stateList, $"Geographic Area Name" === $"State Name")
+
+        // combinedCensusData
+        // .select("State Name", "State Code", "Population Estimate Total")
+        // .show()
+
         val records = hadoopFile.map { case (longWritable, text) => text.toString }
         val jobAdsRdd = findJobAds(records)
-        val jobAdsDf = jobAdsRdd.take(1000).foreach(println)
+        val jobAdsDf = jobAdsRdd.map(word => (word, 1)).reduceByKey(_ + _)
+        val mappedLines = jobAdsDf.toDF("State Code", "Tech Job Total")
+        val combinedCrawl = mappedLines.join(combinedCensusData,("State Code"))
+        .withColumn("Tech Ads Proportional to Population", round(($"Tech Job Total" / $"Population Estimate Total" * 100) , 8))
+        .select($"State Code", $"Geographic Area Name", $"Tech Job Total", $"Population Estimate Total", $"Tech Ads Proportional to Population").show(51, false)
     
     }
 
@@ -89,6 +119,7 @@ object Runner {
             lowercase.contains("software") ||
             lowercase.contains("computer")
       }).flatMap(line => line.split(" "))
+      .filter(line => line.length < 3)
   }
   
 }
