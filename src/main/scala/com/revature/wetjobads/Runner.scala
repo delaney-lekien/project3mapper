@@ -17,6 +17,8 @@ object Runner {
         .getOrCreate()
 
         // Reference: https://sparkbyexamples.com/spark/spark-read-text-file-from-s3/#s3-dependency
+        // Uncomment these lines to run locally, must comment out in order to run on EMR
+        // EMR will provide you with keys, only need keys locally
         // val key = System.getenv(("AWS_ACCESS_KEY_ID"))
         // val secret = System.getenv(("AWS_SECRET_ACCESS_KEY"))
 
@@ -29,7 +31,9 @@ object Runner {
         import spark.implicits._
         sc.setLogLevel("WARN")
 
-        val wetSegments = "s3a://jan-2021-test-txt-bucket/test.txt"
+        // Loading in data from a text file that contains wet.paths for the month of January 2021
+        // Ending up sampling 1/10th of a months worth of data
+        val wetSegments = "s3a://jan-2021-test-txt-bucket/wetTenth.txt"
         val wetS3Paths = sc
         .textFile(wetSegments)
         .map("s3a://commoncrawl/" + _)
@@ -38,10 +42,6 @@ object Runner {
         // textFile() will take a string of comma separated S3 URIs and read them
         // into one big RDD
         val inputFiles = wetS3Paths.mkString(",")
-
-        // prints the contents of every WET file segment 
-        // better not do this with too many segments locally
-        // wetData.foreach(println)
 
         val delimiter = "WARC/1.0"
         val conf = new Configuration(sc.hadoopConfiguration)
@@ -54,6 +54,8 @@ object Runner {
         conf
         )
 
+        // Read in a Census CSV gathered from https://data.census.gov/cedsci/table?q=dp05&g=0100000US.04000.001&y=2019&tid=ACSDT1Y2019.B01003&moe=false&hidePreview=true
+        // This CSV was of 2019 1 year estimate for population in every state
         val censusData = spark.read
             .format("csv")
             .option("header", "true")
@@ -83,19 +85,24 @@ object Runner {
         val jobAdsRdd = findJobAds(records)
         val jobAdsDf = jobAdsRdd.map(word => (word, 1)).reduceByKey(_ + _)
         val mappedLines = jobAdsDf.toDF("State Code", "Tech Job Total")
+        // Joining two tables on matching States codes to get results and creating a new column for tech job abs proportional to population 
         val combinedCrawl = mappedLines.join(combinedCensusData,("State Code"))
         .withColumn("Tech Ads Proportional to Population", round(($"Tech Job Total" / $"Population Estimate Total" * 100) , 8))
         .select($"State Code", $"Geographic Area Name", $"Tech Job Total", $"Population Estimate Total", $"Tech Ads Proportional to Population")
 
+        
+        // save the results into a bukcet on s3
+        // Using .repatition to save all data into one csv versus one for each loaded in segment 
         val s3OutputBucket = "s3a://commoncrawlques1outputbucket/commoncrawl-demo-data"
-        combinedCrawl.write
-            .format("csv")
-            .option("compression", "gzip")
-            .mode("overwrite")
-            .save(s3OutputBucket)
+        combinedCrawl.repartition(1).write.format("csv").mode("overwrite").save(s3OutputBucket)
     
     }
 
+    // Below is filtering for only Tech Jobs
+    // First filter for URI's with job
+    // Second fitler only returns the plain text data from the WARC headers after filtering for jobs
+    // Third filter makes sure all results returned have keys words for tech jobs
+    // Final filter splits all the plain text by space to prep it for finding key-value pairs
     def findJobAds(records: RDD[String]): RDD[String] = {
         records
         .filter(record => {
